@@ -1,1 +1,6 @@
+build.gradle.kts
+/local.properties
+/.idea
 /build
+/captures
+.externalNativeBuild

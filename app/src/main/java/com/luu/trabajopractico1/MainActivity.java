@@ -3,6 +3,8 @@ package com.luu.trabajopractico1;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.*;
+
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -10,27 +12,29 @@ import com.luu.trabajopractico1.viewmodel.ConversorViewModel;
 
 public class MainActivity extends AppCompatActivity {
 
-    private EditText etEuros, etDolares;
-    private Button btnConvertir;
+    private EditText etEuros, etDolares, etConversion;
+    private Button btnConvertir, btnCambiar;
     private TextView txtResultado, txtConversion;
     private RadioButton rbDolares, rbEuros;
     private RadioGroup radioGroup;
 
     private ConversorViewModel viewModel;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
 
         etEuros = findViewById(R.id.etEuros);
         etDolares = findViewById(R.id.etDolares);
         btnConvertir = findViewById(R.id.btnConvertir);
         txtResultado = findViewById(R.id.txtResultado);
-        txtConversion = findViewById(R.id.txtConversion);
+        txtConversion = findViewById(R.id.etConversion);
         rbDolares = findViewById(R.id.rbDolares);
         rbEuros = findViewById(R.id.rbEuros);
         radioGroup = findViewById(R.id.radioGroup);
+        etConversion = findViewById(R.id.etConversion);
+        btnCambiar = findViewById(R.id.btnCambiar);
 
         viewModel = new ViewModelProvider(this).get(ConversorViewModel.class);
 
@@ -87,6 +91,30 @@ public class MainActivity extends AppCompatActivity {
                 double dolares = Double.parseDouble(valor);
                 viewModel.convertirAEuros(dolares);
             }
+
+            btnCambiar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    String valor = etConversion.getText().toString();
+
+                    if (valor.isEmpty()) {
+                        Toast.makeText(MainActivity.this, "Ingrese el nuevo valor", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    try {
+                        double nuevoValor = Double.parseDouble(valor);
+                        viewModel.cambiarTipoCambio(nuevoValor);
+                    } catch (Exception e) {
+                        Toast.makeText(MainActivity.this, "Valor inválido", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+
+            viewModel.getValorConversion().observe(this, valor -> {
+                etConversion.setText(valor.replace("1 USD = ", "").replace(" EUR", ""));
+            });
         });
     }
 }

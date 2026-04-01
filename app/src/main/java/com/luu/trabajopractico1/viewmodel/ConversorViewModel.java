@@ -39,7 +39,7 @@ public class ConversorViewModel extends ViewModel {
     }
 
     public void convertirADolares(double euros) {
-        double res = conversor.convertirADolaresEuros(euros);
+        double res = conversor.convertirAEuros(euros);
         resultado.setValue(String.valueOf(res));
     }
 

@@ -1,65 +1,101 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:padding="20dp"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <RadioGroup
-        android:id="@+id/radioGroup"
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="370dp"
+        android:layout_height="50dp"
+        android:fontFamily="serif"
+        android:text="Conversor de Monedas"
+        android:textSize="25sp" />
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="328dp">
+        android:layout_height="531dp"
+        android:orientation="vertical">
 
-        <EditText
-            android:id="@+id/etEuros"
+        <RadioGroup
+            android:id="@+id/radioGroup"
             android:layout_width="match_parent"
-            android:layout_height="63dp"
-            android:enabled="false"
-            android:hint="Euros"
-            android:inputType="numberDecimal" />
+            android:layout_height="464dp">
 
-        <EditText
-            android:id="@+id/etDolares"
+            <EditText
+                android:id="@+id/etEuros"
+                android:layout_width="match_parent"
+                android:layout_height="63dp"
+                android:enabled="false"
+                android:hint="Euros"
+                android:inputType="numberDecimal" />
+
+            <EditText
+                android:id="@+id/etDolares"
+                android:layout_width="match_parent"
+                android:layout_height="64dp"
+                android:enabled="false"
+                android:hint="Dólares"
+                android:inputType="numberDecimal" />
+
+            <TextView
+                android:id="@+id/txtResultado"
+                android:layout_width="wrap_content"
+                android:layout_height="38dp"
+                android:text="Resultado"
+                android:textSize="18sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="65dp"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/etConversion"
+                    android:layout_width="200dp"
+                    android:layout_height="match_parent"
+                    android:enabled="true"
+                    android:inputType="numberDecimal"
+                    android:hint="1USD = 0.92 EUR"
+                    />
+
+                <Button
+                    android:id="@+id/btnCambiar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Cambiar Valor" />
+
+            </LinearLayout>
+
+            <RadioButton
+                android:id="@+id/rbDolares"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Convertir a Dólares" />
+
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="match_parent"
+                android:layout_height="29dp" />
+
+            <RadioButton
+                android:id="@+id/rbEuros"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Convertir a Euros" />
+
+        </RadioGroup>
+
+        <Button
+            android:id="@+id/btnConvertir"
             android:layout_width="match_parent"
-            android:layout_height="64dp"
-            android:enabled="false"
-            android:hint="Dólares"
-            android:inputType="numberDecimal" />
-
-        <TextView
-            android:id="@+id/txtResultado"
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Resultado"
-            android:textSize="18sp" />
-
-        <TextView
-            android:id="@+id/txtConversion"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="1 USD = 0.92 EUR"
-            android:textSize="16sp" />
-
-        <RadioButton
-            android:id="@+id/rbDolares"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Convertir a Dólares" />
-
-        <RadioButton
-            android:id="@+id/rbEuros"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Convertir a Euros" />
-
-    </RadioGroup>
-
-    <Button
-        android:id="@+id/btnConvertir"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Convertir" />
+            android:text="Convertir"
+            app:iconTint="#FF0000" />
+    </LinearLayout>
 
 
 </LinearLayout>

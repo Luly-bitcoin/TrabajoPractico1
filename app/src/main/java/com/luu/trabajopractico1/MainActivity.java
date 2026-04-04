@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.*;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -14,22 +13,21 @@ public class MainActivity extends AppCompatActivity {
 
     private EditText etEuros, etDolares, etConversion;
     private Button btnConvertir, btnCambiar;
-    private TextView txtResultado, txtConversion;
+    private TextView txtResultado;
     private RadioButton rbDolares, rbEuros;
     private RadioGroup radioGroup;
 
     private ConversorViewModel viewModel;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
 
         etEuros = findViewById(R.id.etEuros);
         etDolares = findViewById(R.id.etDolares);
         btnConvertir = findViewById(R.id.btnConvertir);
         txtResultado = findViewById(R.id.txtResultado);
-        txtConversion = findViewById(R.id.etConversion);
         rbDolares = findViewById(R.id.rbDolares);
         rbEuros = findViewById(R.id.rbEuros);
         radioGroup = findViewById(R.id.radioGroup);
@@ -43,18 +41,15 @@ public class MainActivity extends AppCompatActivity {
         });
 
         viewModel.getValorConversion().observe(this, valor -> {
-            txtConversion.setText(valor);
+            etConversion.setText(valor.replace("1 USD = ", "").replace(" EUR", ""));
         });
 
         radioGroup.setOnCheckedChangeListener((group, checkedId) -> {
-
             if (checkedId == R.id.rbDolares) {
                 etEuros.setEnabled(true);
                 etDolares.setEnabled(false);
                 etDolares.setText("");
-            }
-
-            if (checkedId == R.id.rbEuros) {
+            } else if (checkedId == R.id.rbEuros) {
                 etDolares.setEnabled(true);
                 etEuros.setEnabled(false);
                 etEuros.setText("");
@@ -62,59 +57,48 @@ public class MainActivity extends AppCompatActivity {
         });
 
         btnConvertir.setOnClickListener(v -> {
-
-            if (radioGroup.getCheckedRadioButtonId() == -1) {
+            int selectedId = radioGroup.getCheckedRadioButtonId();
+            if (selectedId == -1) {
                 Toast.makeText(this, "Seleccione una opción", Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            if (rbDolares.isChecked()) {
-                String valor = etEuros.getText().toString();
-
-                if (valor.isEmpty()) {
-                    Toast.makeText(this, "Ingrese valor en Euros", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                double euros = Double.parseDouble(valor);
-                viewModel.convertirADolares(euros);
-            }
-
-            if (rbEuros.isChecked()) {
-                String valor = etDolares.getText().toString();
-
-                if (valor.isEmpty()) {
-                    Toast.makeText(this, "Ingrese valor en Dólares", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                double dolares = Double.parseDouble(valor);
-                viewModel.convertirAEuros(dolares);
-            }
-
-            btnCambiar.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                    String valor = etConversion.getText().toString();
-
+            try {
+                if (rbDolares.isChecked()) {
+                    String valor = etEuros.getText().toString();
                     if (valor.isEmpty()) {
-                        Toast.makeText(MainActivity.this, "Ingrese el nuevo valor", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, "Ingrese valor en Euros", Toast.LENGTH_SHORT).show();
                         return;
                     }
-
-                    try {
-                        double nuevoValor = Double.parseDouble(valor);
-                        viewModel.cambiarTipoCambio(nuevoValor);
-                    } catch (Exception e) {
-                        Toast.makeText(MainActivity.this, "Valor inválido", Toast.LENGTH_SHORT).show();
+                    double euros = Double.parseDouble(valor);
+                    viewModel.convertirADolares(euros);
+                } else if (rbEuros.isChecked()) {
+                    String valor = etDolares.getText().toString();
+                    if (valor.isEmpty()) {
+                        Toast.makeText(this, "Ingrese valor en Dólares", Toast.LENGTH_SHORT).show();
+                        return;
                     }
+                    double dolares = Double.parseDouble(valor);
+                    viewModel.convertirAEuros(dolares);
                 }
-            });
+            } catch (NumberFormatException e) {
+                Toast.makeText(this, "Ingrese un número válido", Toast.LENGTH_SHORT).show();
+            }
+        });
 
-            viewModel.getValorConversion().observe(this, valor -> {
-                etConversion.setText(valor.replace("1 USD = ", "").replace(" EUR", ""));
-            });
+        btnCambiar.setOnClickListener(v -> {
+            String valor = etConversion.getText().toString();
+            if (valor.isEmpty()) {
+                Toast.makeText(MainActivity.this, "Ingrese el nuevo valor", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            try {
+                double nuevoValor = Double.parseDouble(valor);
+                viewModel.cambiarTipoCambio(nuevoValor);
+                Toast.makeText(this, "Tipo de cambio actualizado", Toast.LENGTH_SHORT).show();
+            } catch (Exception e) {
+                Toast.makeText(MainActivity.this, "Valor inválido", Toast.LENGTH_SHORT).show();
+            }
         });
     }
 }
